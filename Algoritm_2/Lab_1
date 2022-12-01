@@ -1,0 +1,80 @@
+#include <iostream>
+using namespace std;
+
+int N = 10;
+
+class queue {
+private:
+    int* arr;
+    int head;
+    int tail;
+
+public:
+    queue()
+    {
+        head = 0;
+        tail = 0;
+        arr = new int[N];
+    }
+
+    queue(int m)
+    {
+        head = 0;
+        tail = 0;
+        arr = new int[m];
+    }
+
+    ~queue()
+    {
+        delete[] arr;
+    }
+
+    void add_item(int a)
+    {
+        if (head == (tail + 1) % N)
+            cout << "Очередь переполнена!!!" << endl;
+        else
+        {
+            arr[tail] = a;
+            tail = (tail + 1) % N;
+        }
+    }
+
+    void extract_item()
+    {
+        if (head != tail)
+        {
+            cout << arr[head];
+            head = (head + 1) % N;
+        }
+        else
+            cout << "Очередь пуста!!!";
+    }
+};
+
+int main()
+{
+    setlocale(LC_ALL, "Rus");
+    int znach;
+    bool r; //укажем логический тип данных для проверки логических условий
+    cout << "Сколько будет элементов в очереди: ";
+    cin >> N;
+    queue one(N);
+    do {
+        cout << "Для добавление введите 1, для извлечения 0: ";
+        cin >> r;
+        if (r)
+        {
+            cout << "Введите значение: ";
+            cin >> znach;
+            one.add_item(znach);
+        }
+        else
+        {
+            cout << "Значение равно: ";
+            one.extract_item();
+            cout << endl;
+        }
+    } while (true);
+    return 0;
+}
