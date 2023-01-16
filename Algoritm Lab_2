@@ -1,0 +1,168 @@
+#include <fstream>
+#include <iostream>
+#include <Windows.h>
+
+#include "train.h"
+
+using namespace std;
+train_vector data_trains;
+
+int main()
+{
+
+	setlocale(LC_ALL, "Russian");  // NOLINT(concurrency-mt-unsafe)
+
+	char choise;
+	bool exit_flag = false;
+	bool menu_flag = true;
+	string name;
+	int temp;
+	
+
+	while (menu_flag)
+	{
+		cout << "Введите 1 - для введения данных с клавиатуры" << endl
+			<< "Введите 2 - для считывания данных с файла" << endl
+			<< "Введите 0 - чтобы выйти из программы" << endl
+			<< "Ваш выбор: ";
+		cin >> choise;
+
+		switch (choise)
+		{
+		case '1':
+
+			while (true)
+			{
+				cout << "Введите количество автомобилей(< 30): ";
+				cin >> temp;
+				if (!((temp >= 1) && (temp <= 30)))
+				{
+					system("cls");  // NOLINT(concurrency-mt-unsafe)
+					cout << "Вы ввели не допустимое количество автомобилей! Попробуйте снова" << endl;
+					continue;
+				}
+				break;
+			}
+
+			data_trains = get_data_from_keyboard(temp);
+
+			menu_flag = false;
+			break;
+
+		case '2':
+
+			cout << "Введите название файла: ";
+			cin >> name;
+
+			data_trains = get_data_from_file(name);
+
+			if (data_trains.empty())
+			{
+				cout << "Ваш файл пуст или не существует! " << endl;
+				system("Pause");  // NOLINT(concurrency-mt-unsafe)
+				exit_flag = true;
+			}
+
+			menu_flag = false;
+			break;
+
+		case '0':
+			menu_flag = false;
+			exit_flag = true;
+			break;
+
+		default:
+			system("cls");  // NOLINT(concurrency-mt-unsafe)
+			cout << "Не верный символ " << endl;
+			break;
+		}
+	}
+
+	if (exit_flag)
+	{
+		return 0;
+	}
+
+	menu_flag = true;
+
+	while (!exit_flag)
+	{
+		while (menu_flag)
+		{
+			system("cls"); // NOLINT(concurrency-mt-unsafe)
+			cout << "Введите 1 - для выведение всех данных на экран" << endl
+				<< "Введите 2 - для записи данных в файл" << endl
+				<< "Введите 3 - для поиска по пробегу" << endl
+				<< "Введите 4 - для добавления нового автомобиля" << endl
+				<< "Введите 5 - для удаления автомобиля" << endl
+				<< "Введите 0 - чтобы выйти из программы" << endl
+				<< "Ваш выбор: ";
+			cin >> choise;
+
+			switch (choise)
+			{
+			case '1':
+				print_data(data_trains);
+				menu_flag = false;
+				break;
+
+			case '2':
+
+				cout << "Введите название файла: ";
+				cin >> name;
+
+				record_data(data_trains, name);
+				menu_flag = false;
+				break;
+
+			case '3':
+
+				cout << "Введите минимальный пробег: ";
+				cin >> temp;
+
+				search_data(data_trains, temp);
+				menu_flag = false;
+				break;
+
+			case '4':
+				add_data(data_trains);
+				menu_flag = false;
+				break;
+
+			case '5':
+
+				system("cls"); // NOLINT(concurrency-mt-unsafe)
+				print_data(data_trains);
+
+				cout << "\n\nВведите номер автомобиля который необходимо удалить: ";
+				cin >> temp;
+
+				remove_data(data_trains, temp - 1);
+				menu_flag = false;
+				break;
+
+			case '0':
+				exit_flag = true;
+				menu_flag = false;
+				break;
+
+			default:
+				system("cls"); // NOLINT(concurrency-mt-unsafe)
+				cout << "Вы ввели не допустимый символ! Попробуйте снова" << endl;
+				break;
+			}
+		}
+
+		if (exit_flag == true)
+		{
+			break;
+		}
+		cout << "Введите 1 для продолжение выполнения программы: ";
+		cin >> choise;
+		if (choise != '1')
+		{
+			exit_flag = true;
+		}
+		menu_flag = true;
+	}
+}
