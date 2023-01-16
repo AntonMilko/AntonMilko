@@ -1,0 +1,77 @@
+#include <iostream>
+
+using namespace std;
+
+struct Worker
+
+{
+	char lastName[30];
+
+	char position[30];
+
+	int year;
+
+};
+
+int main()
+
+{
+	setlocale(LC_ALL, "Russian");
+
+	const int size = 3;
+
+	const int currentYear = 2017;
+
+	int i, b, counter = 0;
+
+	Worker a[size];
+
+	for (i = 0; i < size; i++)
+
+	{
+
+		cout << "Введите фамилию " << i + 1 << "-ого работника " << endl;
+
+		cin >> a[i].lastName;
+
+		cout << endl << "Должность: ";
+
+		cin >> a[i].position;
+
+		cout << endl << "Год поступления на работу: ";
+
+		cin >> a[i].year;
+
+	}
+
+	cout << endl << "Введите стаж работы ";
+
+	cin >> b;
+
+	cout << endl;
+
+	for (i = 0; i < size; i++)
+
+	{
+
+		if (b < currentYear - a[i].year)
+
+		{
+
+			cout << a[i].lastName << " ";
+
+			counter++;
+
+		}
+
+		else
+
+			if (i == size - 1 && counter > 0)
+
+				cout << "Работников с более высоким стажем нет.";
+
+	}
+
+	return 0;
+
+}
