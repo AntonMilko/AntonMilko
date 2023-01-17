@@ -1,0 +1,158 @@
+// реализация односвязанного списка
+
+#include <iostream>
+using namespace std;
+
+struct node
+{
+	string val;
+	node* next;
+	explicit node(string _val) : val(std::move(_val)), next(nullptr) {}
+
+};
+
+//Указатель на первый узел
+//Указатель на последний узел
+//Конструктор
+struct list
+{
+	node* first;
+	node* last;
+
+	list() : first(nullptr), last(nullptr) {}
+
+
+	//Функция проверки наличия узлов в списке
+	//Это однострочная функция, в которой надо проверить является ли первый узел - пустым
+	bool is_empty() const
+	{
+		return first == nullptr;
+	}
+
+	//Функция добавления элемента в конец списка
+	void push_back(string _val)
+	{
+		node* p = new node(std::move(_val));
+		if (is_empty())
+		{
+			first = p;
+			last = p;
+			return;
+		}
+		last->next = p;
+		last = p;
+	}
+
+	//Функция печати всего списка
+	void print() const
+	{
+		if (is_empty()) return;
+		node* p = first;
+		while (p)
+		{
+			cout << p->val << " ";
+			p = p->next;
+		}
+		cout << endl;
+	}
+
+	//Функция поиска узла в списке по заданному значению
+	node* find(string _val)
+	{
+		node* p = first;
+		while (p && p->val != _val) p = p->next;
+		return (p && p->val == _val) ? p : nullptr;
+	}
+
+	//Функция удаления первого узла
+	void remove_first()
+	{
+		if (is_empty()) return;
+		node* p = first;
+		first = p->next;
+		delete p;
+	}
+
+	//Функция удаления последнего узла
+	void remove_last()
+	{
+		if (is_empty()) return;
+		if (first == last)
+		{
+			remove_first();
+			return;
+		}
+		node* p = first;
+		while (p->next != last) p = p->next;
+		p->next = nullptr;
+		delete last;
+		last = p;
+	}
+
+	//Функция удаления узла по заданному значению
+	void remove(string _val) {
+		if (is_empty()) return;
+
+		if (first->val == _val)
+		{
+			remove_first();
+			return;
+		}
+		else if (last->val == _val)
+		{
+			remove_last();
+			return;
+		}
+
+		node* slow = first;
+		node* fast = first->next;
+
+		while (fast && fast->val != _val)
+		{
+			fast = fast->next;
+			slow = slow->next;
+		}
+
+		if (!fast)
+		{
+			cout << "This element does not exist" << endl;
+			return;
+		}
+
+		slow->next = fast->next;
+		delete fast;
+	}
+
+	//Функция обращения к узлу по индексу
+	node* operator[] (const int index) const
+	{
+		if (is_empty()) return nullptr;
+		node* p = first;
+		for (int i = 0; i < index; i++) {
+			p = p->next;
+			if (!p) return nullptr;
+		}
+		return p;
+	}
+
+};
+
+int main()
+{
+	list l;
+	cout << l.is_empty() << endl;
+	l.push_back("3");
+	l.push_back("123");
+	l.push_back("8");
+	l.print();
+	cout << l.is_empty() << endl;
+	l.remove("123");
+	l.print();
+	l.push_back("1234");
+	l.remove_first();
+	l.print();
+	l.remove_last();
+	l.print();
+	cout << l[0]->val << endl;
+	return 0;
+}
