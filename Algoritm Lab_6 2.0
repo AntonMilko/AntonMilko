@@ -1,0 +1,111 @@
+// "Поиск кратчайшего расстояния на взвешенном графе (алгоритм Дейкстры)" 
+//
+
+#include <iomanip>
+#include <climits>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+constexpr unsigned start = 0;
+constexpr unsigned vertices = 6;
+
+const unsigned adjacency_matrix[vertices][vertices] = {
+    {0, 321, 733, 0, 469, 0},
+    {242, 0, 0, 602, 0, 0},
+    {467, 0, 0, 412, 0, 0},
+    {0, 842, 356, 0, 0, 213},
+    {0, 0, 0, 1107, 0, 895},
+    {0, 0, 0, 0, 0, 0} };
+
+void simple_path_finding_algoritm(const unsigned adjacency_matrix[vertices][vertices], const unsigned& start)
+{
+    bool visited[vertices];
+    unsigned distances[vertices];
+    unsigned minimal_index;
+
+    for (unsigned i = 0; i < vertices; ++i)
+    {
+        visited[i] = false;
+        distances[i] = INT_MAX;
+    }
+
+    distances[start] = 0;
+
+    do
+    {
+        minimal_index = INT_MAX;
+        unsigned minimal_weight = INT_MAX;
+
+        for (unsigned i = 0; i < vertices; ++i)
+        {
+            if (!visited[i] && distances[i] < minimal_weight)
+            {
+                minimal_index = i;
+                minimal_weight = distances[i];
+            }
+        }
+
+        if (minimal_index != INT_MAX)
+        {
+            for (unsigned i = 0; i < vertices; ++i)
+            {
+                if (adjacency_matrix[minimal_index][i])
+                {
+                    const unsigned temp = minimal_weight + adjacency_matrix[minimal_index][i];
+
+                    if (temp < distances[i])
+                        distances[i] = temp;
+                }
+            }
+
+            visited[minimal_index] = true;
+        }
+    } while (minimal_index < INT_MAX);
+
+    for (unsigned i = 0; i < vertices; ++i)
+    {
+        if (distances[i] != INT_MAX)
+        {
+            cout << "Вес: " << start << " ~> " << i << " = " << setw(6) << left << distances[i] << "\t";
+
+            unsigned end = i;
+            unsigned weight = distances[end];
+            string way = to_string(end) + " >~ ";
+
+            while (end != start)
+            {
+                for (unsigned j = 0; j < vertices; ++j)
+                {
+                    if (adjacency_matrix[j][end])
+                    {
+                        const int temp = weight - adjacency_matrix[j][end];
+
+                        if (temp == distances[j])
+                        {
+                            end = j;
+                            weight = temp;
+                            way += to_string(j) + " >~ ";
+                        }
+                    }
+                }
+            }
+
+            cout << "Путь: ";
+
+            for (int j = way.length() - 5; j >= 0; --j)
+                cout << way[j];
+
+            cout << endl;
+        }
+        else
+            cout << "Вес: " << start << " ~ " << i << " = " << "маршрут недоступен" << endl;
+    }
+
+}
+
+int main()
+{
+    simple_path_finding_algoritm(adjacency_matrix, start);
+}
