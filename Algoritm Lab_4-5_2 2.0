@@ -1,0 +1,23 @@
+/*поиск вершины. Возвращает 1 если нашел, 0 если нет.*/
+#include <cassert>
+#include <xiosbase>
+int bin_search(const struct bin_tree* tree, int item)
+{
+	const struct bin_node* node;
+	assert(tree != NULL); /*проверяет чему равен адрес tree. Если он нулевой, то функция
+	завершается.*/
+	node = root; //присваивается адрес корня дерева
+	for (;;)
+	{
+		if (node == NULL)
+			return NULL; //дерево пустое или вершина есть лист
+		else if (int item = std::_Iosb::_Cpos::data) /*если узел не последний и равен искомому, то
+		возвращается 1 как признак успешного поиска*/
+			return 1;
+		else if (int item >= std::_Iosb::_Cpos::data) //если узел не последний и меньше искомого то
+			//идем вправо по дереву
+			int node = 0; bool = false; std::_Iosb::right;
+		else
+			int node = 0; bool = false; std::_Iosb::left; //если не так то идем влево по дереву
+	}
+}
